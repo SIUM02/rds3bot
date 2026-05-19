@@ -8,13 +8,13 @@ import time
 # ─── CONFIG ───────────────────────────────────────────────
 BOT_TOKEN = "8905300404:AAGDwjeOM8n5nFqZb8rC8Y2n2ri8xc4qTBE"   # From @BotFather
 CHAT_ID   = "6731734203"              # Your Telegram chat ID
-URL       = "https://nihalxx3.github.io/rds2.northsouth.edu-Fall2025/"
+URL = "https://raw.githubusercontent.com/SIUM02/NSU4/main/Offered%20Courses%20_%20North%20South%20University.html"
 
 # Add the courses you want to watch: ("COURSE_CODE", "SECTION")
 WATCH_LIST = [
-    ("CSE115", "1"),
-    ("CSE115", "2"),
-    ("BUS112", "8"),
+    ("ACT201", "1"),
+    ("CSE299", "2"),
+    ("CSE331/EEE332/EEE453/ETE332", "1"),
     # Add more as needed...
 ]
 # ──────────────────────────────────────────────────────────
@@ -23,25 +23,26 @@ WATCH_LIST = [
 last_seats = {}
 
 def fetch_seats():
-    """Scrape the NSU course table and return a dict of {(course, section): seats}"""
     response = requests.get(URL, timeout=10)
     soup = BeautifulSoup(response.text, "html.parser")
-    
     seats_data = {}
-    table = soup.find("table")
-    rows = table.find_all("tr")[1:]  # Skip header row
-    
+
+    table = soup.find("table", {"id": "offeredCourseTbl"})  # more specific
+    if table is None:
+        print("Table not found!")
+        return seats_data
+
+    rows = table.find_all("tr")[1:]  # skip header
     for row in rows:
         cols = row.find_all("td")
         if len(cols) >= 7:
-            course  = cols[1].text.strip()
+            course = cols[1].text.strip()
             section = cols[2].text.strip()
-            seats   = cols[6].text.strip()
+            seats = cols[6].text.strip()
             try:
                 seats_data[(course, section)] = int(seats)
             except ValueError:
                 pass
-    
     return seats_data
 
 async def send_alert(message):
