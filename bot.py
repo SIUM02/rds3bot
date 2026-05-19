@@ -70,7 +70,7 @@ def check_seats():
         prev_seats = last_seats.get(key, None)
         
         # Alert if seats opened up (was 0 or less, now more than 0)
-        if prev_seats is not None and prev_seats == 0 and current_seats > 0:
+        if prev_seats is not None and prev_seats == current_seats :
             msg = (
                 f"🎉 SEAT AVAILABLE!\n"
                 f"📚 Course: {course}\n"
