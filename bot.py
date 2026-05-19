@@ -117,9 +117,9 @@ def check_seats():
         print(f"{course} Sec {section}: {current_seats} seats | Faculty: {fac} | Time: {times}")
 
 check_seats()
-schedule.every(1).minutes.do(check_seats)
+schedule.every(5).minutes.do(check_seats)
 
-print("✅ Bot is running! Checking every 1 minute...")
+print("✅ Bot is running! Checking every 5 minute...")
 while True:
     schedule.run_pending()
     time.sleep(1)
